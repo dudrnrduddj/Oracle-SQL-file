@@ -1,0 +1,39 @@
+-- 4일차 집합연산자
+-- 1.1 합집합
+-- 1.1.1 UNION, UNION ALL(중복 허용)
+SELECT EMP_NAME, SALARY FROM EMPLOYEE
+WHERE DEPT_CODE = 'D5'
+UNION
+--UNION ALL
+SELECT EMP_NAME, SALARY FROM EMPLOYEE
+WHERE SALARY >= 2400000;
+
+-- UNION VS UNION ALL
+-- UNION은 중복없이 합쳐진 결과가 나옴
+-- UNION ALL은 중복되는 값은 두번씩 결과로 나온다 
+
+-- UNION 사용조건
+-- 1. 컬럼의 개수가 같아야 함.
+-- 2. 컬럼의 데이터타입이 같아야 함.
+-- -> 컬럼 이름은 중요하지않고 컬럼 개수랑 데이터 타입만 확인하면 된다!
+
+-- 1.2 교집합
+-- 1.2.1 INTERSECT
+SELECT EMP_NAME, SALARY FROM EMPLOYEE
+WHERE DEPT_CODE = 'D5'
+INTERSECT
+SELECT EMP_NAME, SALARY FROM EMPLOYEE
+WHERE SALARY >= 2400000;
+-- -> 중복되는 데이터 출력
+
+-- 1.3 차집합
+-- 1.3.1 MINUS
+SELECT EMP_NAME, SALARY FROM EMPLOYEE
+WHERE DEPT_CODE = 'D5'
+MINUS
+SELECT EMP_NAME, SALARY FROM EMPLOYEE
+WHERE SALARY >= 2400000;
+-- A MINUS B 이면 A에서 A와B의 교집합 데이터를 뺀 결과를 출력한다.
+
+
+
