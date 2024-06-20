@@ -136,7 +136,7 @@ FROM EMPLOYEE E
 WHERE EXISTS(SELECT 1 FROM EMPLOYEE WHERE E.DEPT_CODE = (SELECT DEPT_CODE FROM EMPLOYEE WHERE EMP_NAME = '심봉선'));
 
 
--- @실습문제4 - 풀이중...
+-- @실습문제4 
 -- 직급이 J1, J2, J3이 아닌 사원중에서 자신의 부서별 평균급여보다 많은 급여를 받는
 -- 직원의 부서코드, 사원명, 급여, (부서별 급여평균) 정보를 출력하시오.
 

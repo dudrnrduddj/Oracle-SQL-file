@@ -42,6 +42,76 @@ WHERE EXTRACT(YEAR FROM ENTRANCE_DATE) - EXTRACT(YEAR FROM TO_DATE('19'||SUBSTR(
 SELECT TO_CHAR(TO_DATE('20201225','YYYYMMDD'),'DAY') "2020년 크리스마스 요일" FROM DUAL;
 
 
+----------------------------------- 0명인 데이터도 출력되도록 수정
+--13. 학과 별 휴학생 수를 파악하고자 핚다. 학과 번호와 휴학생 수를 표시하는 SQL 문장을----------------!!!!
+--작성하시오.
+
+-- 서브쿼리 이용
+SELECT DEPARTMENT_NO "학과 번호",
+(SELECT DEPARTMENT_NAME FROM TB_DEPARTMENT WHERE S.DEPARTMENT_NO = DEPARTMENT_NO) "학과 이름", 
+COUNT(*)||'명' "휴학생 수" 
+FROM TB_STUDENT S
+WHERE ABSENCE_YN = 'Y'
+GROUP BY DEPARTMENT_NO
+ORDER BY 1 ASC, DEPARTMENT_NO ASC;
+
+--JOIN 이용
+SELECT DEPARTMENT_NO "학과 번호",
+DEPARTMENT_NAME "학과 이름",
+COUNT(*) ||'명' "휴학생 수"
+FROM TB_STUDENT
+JOIN TB_DEPARTMENT
+USING(DEPARTMENT_NO)
+WHERE ABSENCE_YN = 'Y'
+GROUP BY DEPARTMENT_NO, DEPARTMENT_NAME
+ORDER BY 1 ASC, DEPARTMENT_NO ASC;
+
+-----------------------------------------------------
+-- Additional SELECT Option----
+
+--6. 학생 번호, 학생 이름, 학과 이름을 학생 이름으로 오름차순 정렬하여 출력하는 SQL 
+--문을 작성하시오.
+SELECT STUDENT_NO "학생 번호", STUDENT_NAME "학생 이름", DEPARTMENT_NAME "학과 이름" 
+FROM TB_STUDENT
+LEFT OUTER JOIN TB_DEPARTMENT USING(DEPARTMENT_NO)
+ORDER BY STUDENT_NAME ASC;
+
+--7. 춘 기술대학교의 과목 이름과 과목의 학과 이름을 출력하는 SQL 문장을 작성하시오.
+SELECT CLASS_NAME "과목 이름", DEPARTMENT_NAME "학과 이름" FROM TB_CLASS
+JOIN TB_DEPARTMENT USING(DEPARTMENT_NO);
+
+SELECT CLASS_NAME "과목 이름", 
+(SELECT DEPARTMENT_NAME FROM TB_DEPARTMENT WHERE C.DEPARTMENT_NO = DEPARTMENT_NO) "학과 이름"
+FROM TB_CLASS C;
+
+
+--8. 과목별 교수 이름을 찾으려고 핚다. 과목 이름과 교수 이름을 출력하는 SQL 문을
+--작성하시오.
+SELECT  CLASS_NAME "과목 이름", PROFESSOR_NAME "교수 이름"
+FROM TB_CLASS
+LEFT OUTER JOIN TB_PROFESSOR USING(DEPARTMENT_NO)
+ORDER BY PROFESSOR_NAME ASC;
+
+
+
+
+--9. 8 번의 결과 중 ‘인문사회’ 계열에 속핚 과목의 교수 이름을 찾으려고 핚다. 이에
+--해당하는 과목 이름과 교수 이름을 출력하는 SQL 문을 작성하시오.
+
+
+
+
+--10. ‘음악학과’ 학생들의 평점을 구하려고 핚다. 음악학과 학생들의 "학번", "학생 이름", 
+--"젂체 평점"을 출력하는 SQL 문장을 작성하시오. (단, 평점은 소수점 1 자리까지맊
+--반올림하여 표시핚다.)
+
+
+
+
+
+
+
+
 
 
 
