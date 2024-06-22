@@ -15,7 +15,7 @@ BEGIN
     DBMS_OUTPUT.PUT_LINE('Hello PL/SQL');
 END;
 /
-
+-- 출력 메시지를 화면에 표시하도록 설정
 SET SERVEROUTPUT ON; -- developer 껐으면 실행해줘야 함!
 
 DECLARE
