@@ -1,0 +1,98 @@
+개념적 모델링
+	↓↓↓
+논리적 모델링
+	↓↓↓
+물리적 모델링 : 논리적 설계의 산출물인 ERD의 요소들을 관계형 데이터베이스의 요소들로 전환하는 것
+
+*반정규화 : 
+  반정규화(denormalization)는 데이터베이스 설계 과정에서 성능 향상을 목적으로 데이터의 중복을 허용하며, 데이터베이스의 읽기 성능을 높이기 위해 데이터 구조를 변경하는 과정이다.
+  반정규화는 일반적으로 데이터베이스의 물리적 모델링 단계에서 이루어지며, 이를 통해 데이터베이스 시스템의 효율성을 극대화할 수 있다.
+
+
+
+-----
+
+JDBC(Java Database Connectivity)
+  : 자바 언어에서 Database에 접근할 수 있게 해 주는 Programming API
+- 사용하는 DBMS의 Driver를 설치하여 import 시키기)
+- jdbc 파일 경로(oraclexe 11g 버전을 다운받았었음)
+C:\oraclexe\app\oracle\product\11.2.0\server\jdbc
+jar파일로 만들어져 있음. (수업에서는 ojdbc8.jar를 사용 -> 따로 다운)
+
+
+JDBC 코딩 절차
+ 1. 드라이버 등록 (jar)
+ 2. DBMS 연결 생성 (id/pw 확인)
+ 3. Statement 객체 생성 (워크시트, 쿼리문 실행준비)
+ 4. SQL 전송 (CTRL+ENTER)
+ 5. 결과받기 (ResultSet)
+ 6. 자원해제
+
+EX)
+// 1. 드라이버 등록 
+Class.forName("oracle.jdbc.driver.OracleDriver");
+
+// 2. DBMS 연결 생성
+Connection conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "계정ID", "계정PW");
+
+// 3. Statement 생성, 쿼리문 작성
+Statement stmt = conn.createStatement(); -->  워크시트 생성
+
+String queryDQL = "SELECT * FROM TABLE";  --> 쿼리문 작성
+STring queryDML = "INSERT INTO TABLE VALUES()";  --> 쿼리문 작성
+
+// 4. SQL 전송, 결과(resultSet)받기
+ResultSet resultDQL = stmt.executeQuery(queryDQL);  --> select는 ResultSet형 을 반환
+
+int resultDML = stmt.executeUpdate(queryDML);  --> update, delete, insert는 정수형을 반환
+
+
+// 후처리
+-- ResultSet의 next()를 통해 다음 레코드의 유무를 판단
+While(resultDQL.next()){
+	System.out.println(resultDQL.getString("Column Name"));
+}
+-- executeUpdate()를 통해 반환된 정수값
+if(result > 0){
+	// 성공
+	// commit;
+}else{
+	// 실패
+	// rollback;
+}
+
+// 5. 자원해제
+stmt.close();
+conn.close();
+resultDQL.close(); // resultSet은 close() 시켜줘야 함.
+
+
+------------- MVC 패턴 이용한 jdbc 활용 -------------
+
+
+Run - View - Controller - Model 의 구조로 실행
+
+View에서 전체적인 로직을 구성, Model에서 구체적인 각 기능들을 구현
+
+
+
+Run클래스에서 View view생성 및 view의 startProgram() 실행
+View클래스에서 Controller controller생성 및 controller의 selectMember(), insertMember()를 startProgram()메소드 안에서 실행
+Controller클래스에서 Model model생성 및 controller메소드 안에서 model의 메소드 실행
+Model클래스에서 실제 실행될 메소드를 구현
+
+하나의 클래스에서 이어달리기를 하듯 생성자함수를 통해 생성되는 객체의 메소드를 메소드안에서 실행시키는 형태
+Run에서 View를 생성하고 View에서 Controller를 생성하고 Controller에서 Model을 생성...
+
+
+
+Model클래스에서 jdbc를 구현하는데 여기서 쓰이는 데이터의 각 정보들을 MEMBER클래스를 생성해 따로 보관하고
+MEMBER클래스를 담은 ArrayList<Member>를 생성해서 관리했다.
+
+- select를 시킬 땐 데이터베이스에서 데이터를 가져와 Member의 setter를 통해 필드에 저장 후 for문을 이용해 원하는 값 출력
+
+- 원하는 입력값을 insert 시킬 땐 각 입력값을 Member의 필드에 저장 후 Member 객체 생성하여 getter를 이용하여 query문의 문자열 안에 삽입
+
+
+*ResultSet의 next()가 왜 첫 행부터 확인할 수 있을까? next()는 다음 행이 있는지 확인하고 boolean을 출력하는데?
+--> next()의 첫 기준점이 0행에서부터 시작하도록 설계되었다고 함.
