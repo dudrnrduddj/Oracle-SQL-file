@@ -14,13 +14,22 @@ CREATE TABLE MEMBER_TBL
 );
 
 INSERT INTO MEMBER_TBL 
-VALUES('OrdinaryID', 'OrdinaryPW', 'LEECHOONGMOO', '남', 25, 
+VALUES('OrdinaryID5', 'OrdinaryPW', 'LEECHOONGMOO', '남', 25, 
 'cm000519@naver.com', '01085137681', '서울시 도봉구', '운동' , DEFAULT);
 
-SELECT * FROM MEMBER_TBL;
-DELETE FROM MEMBER_TBL;
+SELECT * FROM MEMBER_TBL WHERE MEMBER_ID = 'user01' AND MEMBER_PW = 'userPW01';
+
+
+SELECT * FROM MEMBER_TBL WHERE MEMBER_ID = '' or 'a'='a'--;
+--WHERE member_id = '' or 'a'='a'
+-- 아래처럼 sql문을 작성하면 정보에 접근이 가능해짐(해킹)
+-- SQL Ingection을 통해서 데이터가 유출되는 문제가 발생한다.
+-- 
+-- Statement를 사용하여 전달받은 쿼리에 대한 입력값 검증없이 그대로 실현하기 때문임.
+;
+
+
+
 COMMIT;
-
-
 
 
